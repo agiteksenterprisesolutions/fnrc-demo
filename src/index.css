@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/*
+  FNRC brand, kept to the two colours the corporation uses: its bronze and
+  white. Everything else is a tint of the bronze or a neutral, so the page
+  never drifts from the identity.
+*/
+@theme {
+  --color-fnrc: #7c5e24;
+  --color-fnrc-dark: #5e4719;
+  --color-fnrc-deep: #3f300f;
+  --color-fnrc-soft: #f6f1e6;
+  --color-fnrc-tint: #fbf8f2;
+  --color-fnrc-line: #e5dcc8;
+  --color-ink: #221d13;
+  --color-ink-soft: #5a5145;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: 'Noto Kufi Arabic', 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+[dir='rtl'],
+.font-arabic {
+  font-family: var(--font-arabic);
+}
+
+.fnrc-scroll::-webkit-scrollbar { width: 6px; }
+.fnrc-scroll::-webkit-scrollbar-thumb {
+  background: #d6cbb2;
+  border-radius: 9999px;
+}
