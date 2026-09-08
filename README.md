@@ -47,6 +47,42 @@ origin than the endpoint (by default it is same-origin and sends no CORS
 headers). To point the widget at a token endpoint elsewhere entirely, set
 `VITE_FNRC_TOKEN_ENDPOINT`.
 
+## Deploying to Hostinger (shared hosting)
+
+Hostinger's standard plans are Apache + PHP with no long-running Node process,
+so `server/index.mjs` cannot run there. `public/api/token.php` is the PHP port
+of that endpoint — same claims, same signature — and `public/.htaccess` routes
+`/api/token` to it.
+
+Both live in `public/`, which Vite copies verbatim into `dist/`, so a git-based
+deploy that runs `npm run build` publishes them automatically. Nothing to
+upload by hand except the credentials:
+
+**One-time setup.** Copy `deploy/hostinger/fnrc-secrets.example.php`, fill in
+the LiveKit values, rename it `fnrc-secrets.php`, and upload it **one level
+above** the deployed docroot — e.g. `domains/<site>/fnrc-secrets.php`, next to
+`public_html/`, never inside it. It holds the API secret that signs the tokens,
+so it stays out of git and out of the docroot. `token.php` also reads
+`LIVEKIT_URL` / `LIVEKIT_API_KEY` / `LIVEKIT_API_SECRET` from the environment
+first, if your plan lets you set them.
+
+Check a deploy with:
+
+```bash
+curl -i -X POST https://your-domain/api/token \
+  -H 'Content-Type: application/json' -d '{}'
+```
+
+| Response                              | Meaning                                              |
+| ------------------------------------- | ---------------------------------------------------- |
+| `201` with `participant_token`        | working                                               |
+| `500 Token service not configured`    | `fnrc-secrets.php` not found — wrong directory        |
+| `404`                                 | `.htaccess` not deployed, or `AllowOverride` is off   |
+| `405`                                 | you sent a GET; the endpoint is POST-only             |
+
+On a Hostinger **VPS**, where Node does run, ignore all of this and use
+`npm start` behind the VPS's reverse proxy.
+
 ## The agent contract
 
 Two participant attributes on the LiveKit token, both strings:

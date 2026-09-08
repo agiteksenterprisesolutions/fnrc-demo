@@ -196,6 +196,31 @@ export default function App() {
           }}
           aria-hidden="true"
         />
+        {/* Demo watermark. Sits above the dot pattern and below the content,
+            which is why the content wrapper below is `relative`. */}
+        <div
+          className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden"
+          aria-hidden="true"
+        >
+          <span
+            className="-rotate-12 font-extrabold uppercase tracking-[0.2em] text-fnrc/[0.07]"
+            style={{
+              fontSize: 'clamp(4.25rem, 17vw, 15rem)',
+              lineHeight: 1,
+              // tracking adds a trailing space after the final letter, so the
+              // box is wider than the word and centring the box leaves the
+              // glyphs left of centre. Pulling the box back in by exactly that
+              // space makes it hug the word, and the flex centring is then true.
+              marginRight: '-0.2em',
+              // All caps, so the line box's descender space sits empty below
+              // the letters and pushes them low. Lift by that much. (The
+              // `translate` property composes before Tailwind's `rotate`.)
+              translate: '0 -0.07em',
+            }}
+          >
+            Demo
+          </span>
+        </div>
         <div className="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-fnrc/25 bg-white px-3.5 py-1.5 text-xs font-semibold text-fnrc">

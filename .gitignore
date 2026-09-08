@@ -3,3 +3,4 @@ dist/
 .env
 .env.local
 *.log
+deploy/hostinger/fnrc-secrets.php
